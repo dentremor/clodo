@@ -83,12 +83,20 @@
 
 (defn- print-todos
   "Display all todos from todo-list as a table"
-  [todos & [filter wait]]
+  [todo-list & [filter wait]]
   (print-table [:index :name :deadline :importance :pending]
                (map-indexed (fn [idx todo] (merge (hash-map :index idx) todo))
                             (when (not (nil? filter))
-                              (sort-by (keyword filter) todos))))
+                              (sort-by (keyword filter) todo-list))))
   (when wait (println (colorize-string "\nPress enter to continue" "YELLOW_BOLD")) (read-line)))
+
+(defmacro is-empty
+  "Display all todos from todo-list as a table"
+  [todo-list]
+  `(if (empty? ~todo-list)
+     (do (println (colorize-string "No todos available. One must be added first!\n\nPress enter to continue" "YELLOW_BOLD")) (read-line)
+         false)
+     true))
 
 ;; Functions
 
@@ -122,33 +130,37 @@
   "Display the list-screen and call relevant functions"
   [todo-list]
   (clear-screen)
-  (let [filter (get-string-in-list "Sort list by (name, deadline, importance, pending): " '("name" "deadline" "importance" "pending"))]
-    (print-todos todo-list filter true)))
+  (when (is-empty todo-list)
+    (let [filter (get-string-in-list "Sort list by (name, deadline, importance, pending): " '("name" "deadline" "importance" "pending"))]
+      (print-todos todo-list filter true))))
 
 (defn delete-screen
   "Display the delete-screen and call relevant functions"
   [todo-list]
   (clear-screen)
-  (print-todos todo-list :index false)
-  (let [index (get-num-in-interval "\nDelete Task with index: " 0 (dec (count todo-list)))
-        new-list (util/delete-todo todo-list index)]
-    new-list))
+  (when (is-empty todo-list)
+    (print-todos todo-list :index false)
+    (let [index (get-num-in-interval "\nDelete Task with index: " 0 (dec (count todo-list)))
+          new-list (util/delete-todo todo-list index)]
+      new-list)))
 
 (defn complete-screen
   "Display the complete-screen and call relevant functions"
   [todo-list]
   (clear-screen)
-  (print-todos todo-list :index false)
-  (let [index (get-num-in-interval "\nComplete Task with index: " 0 (- (count todo-list) 1))
-        new-list (util/complete-todo todo-list index)]
-    new-list))
+  (when (is-empty todo-list)
+    (print-todos todo-list :index false)
+    (let [index (get-num-in-interval "\nComplete Task with index: " 0 (- (count todo-list) 1))
+          new-list (util/complete-todo todo-list index)]
+      new-list)))
 
 (defn export-screen
   "Display the export-screen and call relevant functions"
   [todo-list]
   (clear-screen)
-  (let [path (get-export-path "Enter a path for storing a json file (e.g. /tmp/foo.json): ")]
-    (util/export-todos todo-list path)))
+  (when (is-empty todo-list)
+    (let [path (get-export-path "Enter a path for storing a json file (e.g. /tmp/foo.json): ")]
+      (util/export-todos todo-list path))))
 
 (defn import-screen
   "Display the import-screen and call relevant functions"

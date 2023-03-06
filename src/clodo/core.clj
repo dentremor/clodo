@@ -3,9 +3,7 @@
   (:require [clodo.display :as display]))
 
 (def todo-list
-  [(hash-map :name "Wartering flowers" :deadline "2023-03-02" :importance 2 :pending true)
-   (hash-map :name "Do dishes" :deadline "2023-03-10" :importance 1 :pending true)
-   (hash-map :name "Book flight" :deadline "2023-03-09" :importance 3 :pending true)])
+  [])
 
 (defn application-loop
   "Keeps the programm alive"
