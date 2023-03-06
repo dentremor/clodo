@@ -88,7 +88,7 @@
                (map-indexed (fn [idx todo] (merge (hash-map :index idx) todo))
                             (when (not (nil? filter))
                               (sort-by (keyword filter) todos))))
-  (when wait (read-line)))
+  (when wait (println (colorize-string "\nPress enter to continue" "YELLOW_BOLD")) (read-line)))
 
 ;; Functions
 
@@ -113,7 +113,9 @@
         deadline (get-date "Enter todo deadline (e.g. 2023-03-22): ")
         importance (get-num-in-interval "Enter todo importance (1-3): " 1 3)
         new-list (util/add-todo todo-list name deadline importance)]
-    (print-table [:name :deadline :importance :pending] [(last new-list)]) (read-line)
+    (print-table [:name :deadline :importance :pending] [(last new-list)])
+    (println (colorize-string "\nPress enter to continue" "YELLOW_BOLD"))
+    (read-line)
     new-list))
 
 (defn list-screen
@@ -126,16 +128,18 @@
 (defn delete-screen
   "Display the delete-screen and call relevant functions"
   [todo-list]
+  (clear-screen)
   (print-todos todo-list :index false)
-  (let [index (get-num-in-interval "Complete Task with index: " 0 (dec (count todo-list)))
+  (let [index (get-num-in-interval "\nDelete Task with index: " 0 (dec (count todo-list)))
         new-list (util/delete-todo todo-list index)]
     new-list))
 
 (defn complete-screen
   "Display the complete-screen and call relevant functions"
   [todo-list]
+  (clear-screen)
   (print-todos todo-list :index false)
-  (let [index (get-num-in-interval "Complete Task with index: " 0 (- (count todo-list) 1))
+  (let [index (get-num-in-interval "\nComplete Task with index: " 0 (- (count todo-list) 1))
         new-list (util/complete-todo todo-list index)]
     new-list))
 
