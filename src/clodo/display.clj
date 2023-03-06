@@ -90,8 +90,8 @@
                               (sort-by (keyword filter) todo-list))))
   (when wait (println (colorize-string "\nPress enter to continue" "YELLOW_BOLD")) (read-line)))
 
-(defmacro is-empty
-  "Display all todos from todo-list as a table"
+(defmacro vector-empty?
+  "Checks if the todo-list vector is empty"
   [todo-list]
   `(if (empty? ~todo-list)
      (do (println (colorize-string "No todos available. One must be added first!\n\nPress enter to continue" "YELLOW_BOLD")) (read-line)
@@ -130,7 +130,7 @@
   "Display the list-screen and call relevant functions"
   [todo-list]
   (clear-screen)
-  (when (is-empty todo-list)
+  (when (vector-empty? todo-list)
     (let [filter (get-string-in-list "Sort list by (name, deadline, importance, pending): " '("name" "deadline" "importance" "pending"))]
       (print-todos todo-list filter true))))
 
@@ -138,7 +138,7 @@
   "Display the delete-screen and call relevant functions"
   [todo-list]
   (clear-screen)
-  (when (is-empty todo-list)
+  (when (vector-empty? todo-list)
     (print-todos todo-list :index false)
     (let [index (get-num-in-interval "\nDelete Task with index: " 0 (dec (count todo-list)))
           new-list (util/delete-todo todo-list index)]
@@ -148,7 +148,7 @@
   "Display the complete-screen and call relevant functions"
   [todo-list]
   (clear-screen)
-  (when (is-empty todo-list)
+  (when (vector-empty? todo-list)
     (print-todos todo-list :index false)
     (let [index (get-num-in-interval "\nComplete Task with index: " 0 (- (count todo-list) 1))
           new-list (util/complete-todo todo-list index)]
@@ -158,7 +158,7 @@
   "Display the export-screen and call relevant functions"
   [todo-list]
   (clear-screen)
-  (when (is-empty todo-list)
+  (when (vector-empty? todo-list)
     (let [path (get-export-path "Enter a path for storing a json file (e.g. /tmp/foo.json): ")]
       (util/export-todos todo-list path))))
 
