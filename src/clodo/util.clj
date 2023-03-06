@@ -12,7 +12,6 @@
 (defn delete-todo
   "Deletes a todo from the todo list by index"
   [todo-list index]
-  (println todo-list)
   (let [new-list (into [] (concat (subvec todo-list 0 index)
                                   (subvec todo-list (inc index))))]
     new-list))

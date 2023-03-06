@@ -1,6 +1,5 @@
 (ns clodo.validate-test
   (:require [clojure.test :refer :all]
-            [clodo.util :refer :all]
             [clodo.validate :as validate]))
 
 (deftest with-list-test []

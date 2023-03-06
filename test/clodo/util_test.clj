@@ -1,6 +1,5 @@
 (ns clodo.util-test
   (:require [clojure.test :refer :all]
-            [clodo.util :refer :all]
             [clodo.util :as util]))
 
 (deftest add-todo-test
