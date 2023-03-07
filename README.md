@@ -12,6 +12,6 @@ $ lein run
 
 ## License
 
-clodo (c) 2023 Daniel Hiller and contributors
+CloDo (c) 2023 Daniel Hiller and contributors
 
 Eclipse Public License - v 2.0
