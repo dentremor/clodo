@@ -1,6 +1,6 @@
-# clodo
+# CloDo
 
-A todo cli app written in clojure.
+A todo cli app written in Clojure.
 
 ## Usage
 
