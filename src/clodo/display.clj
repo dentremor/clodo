@@ -165,9 +165,8 @@
 (defn import-screen
   "Display the import-screen and call relevant functions"
   [& [missing]]
-  (if (nil? missing)
-    (clear-screen)
-    (println "File doesn't exist!"))
+  (when (not (nil? missing))
+    (clear-screen))
   (let [path (get-import-path "Enter a path for importing a json file (e.g. /tmp/foo.json): ")
         todo-list (util/import-todos path)]
     todo-list))

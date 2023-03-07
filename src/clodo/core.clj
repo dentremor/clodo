@@ -2,26 +2,27 @@
   (:gen-class)
   (:require [clodo.display :as display]))
 
-(def todo-list
-  [])
-
 (defn application-loop
   "Keeps the programm alive"
-  []
+  [& [todos func]]
   (display/welcome-screen)
   (print "Input: ")
   (flush)
-  (let [input (read-line)]
+  (let [todo-list (cond
+                    (nil? func) (if (nil? todos) [] todos)
+                    (nil? todos) (func [])
+                    :else (let [result (func todos)] (if (vector? result) result todos)))
+        input (when (nil? func) (read-line))]
     (case input
-      "add" (def todo-list (display/add-screen todo-list))
-      "list" (display/list-screen todo-list)
-      "del" (def todo-list (display/delete-screen todo-list))
-      "comp" (def todo-list (display/complete-screen todo-list))
-      "expo" (display/export-screen todo-list)
-      "impo" (def todo-list (display/import-screen))
+      "add" (application-loop todo-list display/add-screen)
+      "list" (application-loop todo-list display/list-screen)
+      "del" (application-loop todo-list display/delete-screen)
+      "comp" (application-loop todo-list display/complete-screen)
+      "expo" (application-loop todo-list display/export-screen)
+      "impo" (application-loop nil display/import-screen)
       "exit" (System/exit 0)
-      (recur))))
+      (application-loop todo-list))))
 
 (defn -main
   []
-  (while true (application-loop)))
+  (application-loop))
