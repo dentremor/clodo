@@ -23,5 +23,5 @@
       (recur))))
 
 (defn -main
-  [& args]
+  []
   (while true (application-loop)))
