@@ -4,7 +4,7 @@ A todo cli app written in Clojure.
 
 ## Usage
 
-### Using leiningen
+### Using Leiningen
 
 ```
 $ lein run
