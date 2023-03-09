@@ -9,7 +9,7 @@
   (print "Input: ")
   (flush)
   (let [todo-list (cond
-                    (nil? func) (if (nil? todos) [] todos)
+                    (nil? func) (when (not (nil? todos)) todos)
                     (nil? todos) (func [])
                     :else (let [result (func todos)] (if (vector? result) result todos)))
         input (when (nil? func) (read-line))]
