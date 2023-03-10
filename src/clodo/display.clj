@@ -48,10 +48,12 @@
   (if (nil? invalid)
     (println print)
     (println (colorize-string invalid "YELLOW_BOLD") "is no valid option! Please try again:"))
-  (let [input (try (validate/num-in-interval (Integer/parseInt (read-line)) lower upper)
-                   (catch Exception e
-                     (let [invalid (-> e ex-data :input)]
-                       (get-num-in-interval print lower upper invalid))))] input))
+  (let [input
+        (try
+          (validate/num-in-interval (Integer/parseInt (read-line)) lower upper)
+          (catch Exception e
+            (let [invalid (-> e ex-data :input)]
+              (get-num-in-interval print lower upper invalid))))] input))
 
 (defn- get-string-in-list
   "Handles and validate a string parameter from a given list"
