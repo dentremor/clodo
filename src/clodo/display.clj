@@ -18,6 +18,17 @@
   (print (str (char 27) "[2J")) ; clear screen
   (print (str (char 27) "[;H"))) ; move cursor to the top left corner of the screen
 
+(defn- print-todos
+  "Display all todos from todo-list as a table"
+  [todo-list & [filter wait]]
+  (print-table [:index :name :deadline :importance :pending]
+               (map-indexed (fn [idx todo] (merge (hash-map :index idx) todo))
+                            (when (not (nil? filter))
+                              (sort-by (keyword filter) todo-list))))
+  (when wait (println (colorize-string "\nPress enter to continue" "YELLOW_BOLD")) (read-line)))
+
+;; Validation functions
+
 (defn- get-date
   "Handles and validate a date parameter"
   [print & [invalid]]
@@ -81,15 +92,6 @@
             (let [invalid (-> e ex-data :input)]
               (get-import-path print invalid))))] input))
 
-(defn- print-todos
-  "Display all todos from todo-list as a table"
-  [todo-list & [filter wait]]
-  (print-table [:index :name :deadline :importance :pending]
-               (map-indexed (fn [idx todo] (merge (hash-map :index idx) todo))
-                            (when (not (nil? filter))
-                              (sort-by (keyword filter) todo-list))))
-  (when wait (println (colorize-string "\nPress enter to continue" "YELLOW_BOLD")) (read-line)))
-
 (defmacro vector-empty?
   "Checks if the todo-list vector is empty"
   [todo-list]
@@ -98,7 +100,7 @@
          false)
      true))
 
-;; Functions
+;; Public functions
 
 (defn welcome-screen
   "Display the initial welcome screen"
